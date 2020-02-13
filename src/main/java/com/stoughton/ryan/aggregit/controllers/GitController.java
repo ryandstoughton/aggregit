@@ -11,8 +11,8 @@ import reactor.core.publisher.Mono;
 @RequestMapping(path = "/git")
 public class GitController {
 
-    @GetMapping(path = "/contributions", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<Integer> userContributions() {
-        return Mono.just(3); // FIXME: Return the expected user info
-    }
+  @GetMapping(path = "/contributions", produces = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<Integer> userContributions() {
+    return Mono.just(3); // FIXME: Return the expected user info
+  }
 }

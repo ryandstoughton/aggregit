@@ -1,0 +1,37 @@
+{
+  "data": {
+    "viewer": {
+      "login": "ryan",
+      "contributionsCollection": {
+        "contributionCalendar": {
+          "weeks": [
+            {
+              "contributionDays": [
+                {
+                  "contributionCount": 1,
+                  "weekday": 0
+                },
+                {
+                  "contributionCount": 0,
+                  "weekday": 1
+                }
+              ]
+            },
+            {
+              "contributionDays": [
+                {
+                  "contributionCount": 2,
+                  "weekday": 0
+                },
+                {
+                  "contributionCount": 1,
+                  "weekday": 1
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AggregitApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AggregitApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(AggregitApplication.class, args);
+  }
 
 }
