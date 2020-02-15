@@ -7,11 +7,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData;
-import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.Viewer;
-import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.Viewer.ContributionsCollection;
-import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.Viewer.ContributionsCollection.ContributionCalendar;
-import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.Viewer.ContributionsCollection.ContributionCalendar.Week;
-import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.Viewer.ContributionsCollection.ContributionCalendar.Week.ContributionDay;
+import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User;
+import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User.ContributionsCollection;
+import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User.ContributionsCollection.ContributionCalendar;
+import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User.ContributionsCollection.ContributionCalendar.Week;
+import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User.ContributionsCollection.ContributionCalendar.Week.ContributionDay;
 import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,8 +59,8 @@ public class GithubContributionsTest {
     GithubContributions expected = GithubContributions.builder()
         .data(
             ContributionsData.builder()
-                .viewer(
-                    Viewer.builder()
+                .user(
+                    User.builder()
                         .login("ryan")
                         .contributionsCollection(
                             ContributionsCollection.builder()

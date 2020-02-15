@@ -1,5 +1,6 @@
 package com.stoughton.ryan.aggregit.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GithubContributions {
 
   private ContributionsData data;
@@ -20,13 +22,13 @@ public class GithubContributions {
   @AllArgsConstructor
   public static class ContributionsData {
 
-    private Viewer viewer;
+    private User user;
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Viewer {
+    public static class User {
 
       private String login;
       private ContributionsCollection contributionsCollection;
