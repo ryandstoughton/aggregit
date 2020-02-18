@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionErrors;
 import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData;
 import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User;
 import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User.ContributionsCollection;
@@ -24,16 +25,20 @@ public class GithubContributionsTest {
   private ObjectMapper mapper = new ObjectMapper();
 
   private String githubContributionsJson;
+  private String githubContributionsWithErrorsJson;
 
   @BeforeEach
   void setUp() throws IOException {
     githubContributionsJson = IOUtils.inputStreamAsString(
         new ClassPathResource("githubContributions.json").getInputStream(),
         "UTF-8");
+    githubContributionsWithErrorsJson = IOUtils.inputStreamAsString(
+        new ClassPathResource("githubContributionsWithErrors.json").getInputStream(),
+        "UTF-8");
   }
 
   @Test
-  void serializesGithubContributionsFromJson() throws JsonProcessingException {
+  void success_serializesGithubContributionsFromJson() throws JsonProcessingException {
     Week week1 = Week.builder()
         .contributionDays(Lists.newArrayList(
             ContributionDay.builder()
@@ -74,6 +79,21 @@ public class GithubContributionsTest {
         .build();
     GithubContributions actual = mapper
         .readValue(githubContributionsJson, GithubContributions.class);
+
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void error_serializesGithubContributionsFromJsonContainingErrorsList()
+      throws JsonProcessingException {
+    GithubContributions expected = GithubContributions.builder()
+        .data(ContributionsData.builder()
+            .user(null)
+            .build())
+        .errors(Lists.newArrayList(ContributionErrors.builder().build()))
+        .build();
+    GithubContributions actual = mapper
+        .readValue(githubContributionsWithErrorsJson, GithubContributions.class);
 
     assertThat(actual).isEqualTo(expected);
   }

@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class GithubContributions {
 
   private ContributionsData data;
+  private List<ContributionErrors> errors;
 
   @Data
   @Builder
@@ -70,5 +71,13 @@ public class GithubContributions {
         }
       }
     }
+  }
+
+  @Data
+  @Builder
+  @NoArgsConstructor
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  public static class ContributionErrors {
+    // Ignore actual errors for now - assume user is not found if errors are present
   }
 }
