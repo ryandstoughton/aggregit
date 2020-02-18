@@ -1,4 +1,4 @@
-package com.stoughton.ryan.aggregit.controllers;
+package com.stoughton.ryan.aggregit.github;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import com.stoughton.ryan.aggregit.domain.GithubContributions;
 import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData;
 import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User;
-import com.stoughton.ryan.aggregit.github.GithubService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,20 +16,20 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @ExtendWith(MockitoExtension.class)
-class GitControllerTest {
+class GithubServiceTest {
 
   @Mock
-  private GithubService githubService;
+  private GithubClient githubClient;
 
-  private GitController subject;
+  private GithubService subject;
 
   @BeforeEach
   void setUp() {
-    subject = new GitController(githubService);
+    subject = new GithubService(githubClient);
   }
 
   @Test
-  void userContributions_callsGithubService() {
+  void userContributions_callsGithubClient() {
     String username = "someuser";
     GithubContributions expectedGithubContributions = GithubContributions.builder()
         .data(ContributionsData.builder()
@@ -39,7 +38,7 @@ class GitControllerTest {
                 .build())
             .build())
         .build();
-    when(githubService.userContributions(username))
+    when(githubClient.userContributions(username))
         .thenReturn(Mono.just(expectedGithubContributions));
 
     StepVerifier.create(subject.userContributions(username))
@@ -49,6 +48,6 @@ class GitControllerTest {
         .expectComplete()
         .verify();
 
-    verify(githubService).userContributions(username);
+    verify(githubClient).userContributions(username);
   }
 }
