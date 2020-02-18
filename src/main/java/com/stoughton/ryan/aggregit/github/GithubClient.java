@@ -16,7 +16,7 @@ public class GithubClient {
     this.webClient = webClient;
   }
 
-  public Mono<GithubContributions> getUserContributions(String username) {
+  public Mono<GithubContributions> userContributions(String username) {
     return webClient.post()
         .contentType(MediaType.APPLICATION_JSON)
         .body(BodyInserters.fromValue(buildUserContributionsQuery(username)))

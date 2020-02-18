@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.util.function.Consumer;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.synchronoss.cloud.nio.multipart.util.IOUtils;
 import reactor.test.StepVerifier;
 
 /*
@@ -40,7 +42,7 @@ class GithubClientIntegrationTest {
   }
 
   @Test
-  void getUserContributions() throws IOException {
+  void userContributions_sendsExpectedRequestBody() throws IOException, InterruptedException {
     startServer();
 
     GithubContributions expectedBody = GithubContributions.builder()
@@ -56,10 +58,29 @@ class GithubClientIntegrationTest {
         .setHeader("content-type", "application/json")
         .setBody(expectedBodyJson));
 
-    StepVerifier.create(subject.getUserContributions("someuser"))
+    StepVerifier.create(subject.userContributions("someuser"))
         .consumeNextWith(response -> assertThat(response).isEqualTo(expectedBody))
         .expectComplete()
         .verify();
+
+    RecordedRequest recordedRequest = this.server.takeRequest();
+    String requestBody = IOUtils
+        .inputStreamAsString(recordedRequest.getBody().inputStream(), "UTF-8");
+    assertThat(requestBody).isEqualTo("\"query\": \"query {\n"
+        + "  user(login: \"someuser\") {\n"
+        + "    login\n"
+        + "    contributionsCollection {\n"
+        + "      contributionCalendar {\n"
+        + "        weeks {\n"
+        + "          contributionDays {\n"
+        + "            contributionCount\n"
+        + "            weekday\n"
+        + "          }\n"
+        + "        }\n"
+        + "      }\n"
+        + "    }\n"
+        + "  }\n"
+        + "}\n\"");
   }
 
   private void startServer() {
