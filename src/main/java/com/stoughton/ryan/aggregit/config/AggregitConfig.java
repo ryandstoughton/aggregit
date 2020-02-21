@@ -18,7 +18,9 @@ public class AggregitConfig {
   public WebClient githubWebClient() {
     return WebClient.builder()
         .baseUrl(properties.getGithub().getBaseUrl())
-        .defaultHeader(HttpHeaders.AUTHORIZATION, properties.getGithub().getToken())
+        .defaultHeader(
+            HttpHeaders.AUTHORIZATION,
+            "Bearer " + properties.getGithub().getToken())
         .build();
   }
 }

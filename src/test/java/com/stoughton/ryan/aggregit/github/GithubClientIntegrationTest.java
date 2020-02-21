@@ -66,21 +66,7 @@ class GithubClientIntegrationTest {
     RecordedRequest recordedRequest = this.server.takeRequest();
     String requestBody = IOUtils
         .inputStreamAsString(recordedRequest.getBody().inputStream(), "UTF-8");
-    assertThat(requestBody).isEqualTo("\"query\": \"query {\n"
-        + "  user(login: \"someuser\") {\n"
-        + "    login\n"
-        + "    contributionsCollection {\n"
-        + "      contributionCalendar {\n"
-        + "        weeks {\n"
-        + "          contributionDays {\n"
-        + "            contributionCount\n"
-        + "            weekday\n"
-        + "          }\n"
-        + "        }\n"
-        + "      }\n"
-        + "    }\n"
-        + "  }\n"
-        + "}\n\"");
+    assertThat(requestBody).isEqualTo("{\"query\": \"query { user(login: \\\"someuser\\\") { login contributionsCollection { contributionCalendar { weeks { contributionDays { contributionCount weekday } } } } } }\"}");
   }
 
   private void startServer() {

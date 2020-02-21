@@ -21,7 +21,9 @@ public class GitController {
   }
 
   @GetMapping(path = "/contributions", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<GithubContributions> userContributions(@RequestParam("username") String username) {
+  public Mono<GithubContributions> userContributions(
+      @RequestParam("platform") String platform,
+      @RequestParam("username") String username) {
     return githubService.userContributions(username);
   }
 }

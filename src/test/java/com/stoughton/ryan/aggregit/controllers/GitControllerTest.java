@@ -31,6 +31,7 @@ class GitControllerTest {
 
   @Test
   void userContributions_callsGithubService() {
+    String platform = "github";
     String username = "someuser";
     GithubContributions expectedGithubContributions = GithubContributions.builder()
         .data(ContributionsData.builder()
@@ -42,7 +43,7 @@ class GitControllerTest {
     when(githubService.userContributions(username))
         .thenReturn(Mono.just(expectedGithubContributions));
 
-    StepVerifier.create(subject.userContributions(username))
+    StepVerifier.create(subject.userContributions(platform, username))
         .as("Call to subject that should produce some expected GithubContributions")
         .assertNext(githubContributions ->
             Assertions.assertEquals(githubContributions, expectedGithubContributions))
