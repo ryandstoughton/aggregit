@@ -1,14 +1,15 @@
 package com.stoughton.ryan.aggregit.controllers;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.stoughton.ryan.aggregit.github.GithubService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -35,5 +36,15 @@ class GitControllerIntegrationTest {
         .expectStatus().isOk();
 
     verify(githubService).userContributions("someuser");
+  }
+
+  @Test
+  void userContributions_targetsUnsupportedPlatform() {
+    webTestClient.get().uri("/git/contributions?username=someuser&platform=badplatform")
+        .accept(MediaType.APPLICATION_JSON)
+        .exchange()
+        .expectStatus().isEqualTo(HttpStatus.BAD_REQUEST);
+
+    verify(githubService, times(0)).userContributions("someuser");
   }
 }

@@ -3,6 +3,7 @@ package com.stoughton.ryan.aggregit.controllers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.stoughton.ryan.aggregit.controllers.GitController.UnsupportedPlatformException;
 import com.stoughton.ryan.aggregit.domain.GithubContributions;
 import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData;
 import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User;
@@ -30,7 +31,7 @@ class GitControllerTest {
   }
 
   @Test
-  void userContributions_callsGithubService() {
+  void userContributions_targetsGithub_callsGithubService() {
     String platform = "github";
     String username = "someuser";
     GithubContributions expectedGithubContributions = GithubContributions.builder()
@@ -51,5 +52,16 @@ class GitControllerTest {
         .verify();
 
     verify(githubService).userContributions(username);
+  }
+
+  @Test
+  void userContributions_targetsUnsupportedPlatform_throwsException() {
+    String platform = "badplatform";
+    String username = "someuser";
+
+    StepVerifier.create(subject.userContributions(platform, username))
+        .as("Call to subject with an invalid platform value")
+        .expectError(UnsupportedPlatformException.class)
+        .verify();
   }
 }
