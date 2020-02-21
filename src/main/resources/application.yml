@@ -3,3 +3,6 @@ aggregit:
   github:
     baseUrl: "https://api.github.com/graphql"
     token: ${GITHUB_ACCESS_TOKEN}
+  gitlab:
+    baseUrl: "https://gitlab.com/api/v4"
+    token: ${GITLAB_ACCESS_TOKEN}

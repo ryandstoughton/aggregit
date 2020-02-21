@@ -23,4 +23,14 @@ public class AggregitConfig {
             "Bearer " + properties.getGithub().getToken())
         .build();
   }
+
+  @Bean(name = "gitlabWebClient")
+  public WebClient gitlabWebClient() {
+    return WebClient.builder()
+        .baseUrl(properties.getGitlab().getBaseUrl())
+        .defaultHeader(
+            HttpHeaders.AUTHORIZATION,
+            "Bearer " + properties.getGitlab().getToken())
+        .build();
+  }
 }

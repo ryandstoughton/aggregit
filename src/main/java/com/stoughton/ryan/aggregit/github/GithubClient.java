@@ -11,10 +11,9 @@ import reactor.core.publisher.Mono;
 @Component
 public class GithubClient {
 
-  @Qualifier(value = "githubWebClient")
   private WebClient webClient;
 
-  public GithubClient(WebClient webClient) {
+  public GithubClient(@Qualifier(value = "githubWebClient") WebClient webClient) {
     this.webClient = webClient;
   }
 
