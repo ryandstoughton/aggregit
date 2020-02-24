@@ -1,4 +1,4 @@
-package com.stoughton.ryan.aggregit.domain;
+package com.stoughton.ryan.aggregit.github;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;

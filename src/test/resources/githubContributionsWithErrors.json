@@ -3,6 +3,8 @@
     "user": null
   },
   "errors": [
-    { "type": "this does not matter" }
+    {
+      "type": "this does not matter"
+    }
   ]
 }

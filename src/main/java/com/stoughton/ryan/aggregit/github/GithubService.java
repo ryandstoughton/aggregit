@@ -1,6 +1,5 @@
 package com.stoughton.ryan.aggregit.github;
 
-import com.stoughton.ryan.aggregit.domain.GithubContributions;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 

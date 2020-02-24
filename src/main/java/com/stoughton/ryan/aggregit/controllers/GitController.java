@@ -1,6 +1,6 @@
 package com.stoughton.ryan.aggregit.controllers;
 
-import com.stoughton.ryan.aggregit.domain.GithubContributions;
+import com.stoughton.ryan.aggregit.github.GithubContributions;
 import com.stoughton.ryan.aggregit.github.GithubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

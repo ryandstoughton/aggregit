@@ -1,6 +1,5 @@
 package com.stoughton.ryan.aggregit.github;
 
-import com.stoughton.ryan.aggregit.domain.GithubContributions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

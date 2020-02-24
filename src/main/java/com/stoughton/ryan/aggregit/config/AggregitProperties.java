@@ -13,12 +13,14 @@ public class AggregitProperties {
 
   @Data
   public static class Github {
+
     private String baseUrl;
     private String token;
   }
 
   @Data
   public static class Gitlab {
+
     private String baseUrl;
     private String token;
   }

@@ -3,9 +3,8 @@ package com.stoughton.ryan.aggregit.github;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.stoughton.ryan.aggregit.domain.GithubContributions;
-import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData;
-import com.stoughton.ryan.aggregit.domain.GithubContributions.ContributionsData.User;
+import com.stoughton.ryan.aggregit.github.GithubContributions.ContributionsData;
+import com.stoughton.ryan.aggregit.github.GithubContributions.ContributionsData.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
