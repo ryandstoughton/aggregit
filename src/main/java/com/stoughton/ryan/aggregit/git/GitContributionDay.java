@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GitContribution {
+public class GitContributionDay {
 
   /*
    * Represents days of the current 'Git Year'
    * 0   -> first day of the current year's worth of days
-   * 365 -> today
+   * 364 -> today
    */
   public int dayOfYear;
 

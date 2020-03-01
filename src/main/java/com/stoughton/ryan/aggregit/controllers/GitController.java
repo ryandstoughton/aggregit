@@ -1,7 +1,8 @@
 package com.stoughton.ryan.aggregit.controllers;
 
-import com.stoughton.ryan.aggregit.github.GithubContributions;
+import com.stoughton.ryan.aggregit.git.GitContributionDay;
 import com.stoughton.ryan.aggregit.github.GithubService;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,7 +25,7 @@ public class GitController {
   }
 
   @GetMapping(path = "/contributions", produces = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<GithubContributions> userContributions(
+  public Mono<List<GitContributionDay>> userContributions(
       @RequestParam("platform") String platform,
       @RequestParam("username") String username) {
     switch (platform) {

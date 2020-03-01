@@ -4,10 +4,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.stoughton.ryan.aggregit.controllers.GitController.UnsupportedPlatformException;
-import com.stoughton.ryan.aggregit.github.GithubContributions;
-import com.stoughton.ryan.aggregit.github.GithubContributions.ContributionsData;
-import com.stoughton.ryan.aggregit.github.GithubContributions.ContributionsData.User;
+import com.stoughton.ryan.aggregit.git.GitContributionDay;
 import com.stoughton.ryan.aggregit.github.GithubService;
+import java.util.List;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,20 +34,17 @@ class GitControllerTest {
   void userContributions_targetsGithub_callsGithubService() {
     String platform = "github";
     String username = "someuser";
-    GithubContributions expectedGithubContributions = GithubContributions.builder()
-        .data(ContributionsData.builder()
-            .user(User.builder()
-                .login(username)
-                .build())
-            .build())
-        .build();
+    List<GitContributionDay> expectedGitContributions = Lists.newArrayList(
+        GitContributionDay.builder().count(1).dayOfYear(0).build(),
+        GitContributionDay.builder().count(3).dayOfYear(1).build()
+    );
     when(githubService.userContributions(username))
-        .thenReturn(Mono.just(expectedGithubContributions));
+        .thenReturn(Mono.just(expectedGitContributions));
 
     StepVerifier.create(subject.userContributions(platform, username))
         .as("Call to subject that should produce some expected GithubContributions")
         .assertNext(githubContributions ->
-            Assertions.assertEquals(githubContributions, expectedGithubContributions))
+            Assertions.assertEquals(githubContributions, expectedGitContributions))
         .expectComplete()
         .verify();
 

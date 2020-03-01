@@ -1,0 +1,77 @@
+{
+  "data": {
+    "user": {
+      "login": "ryandstoughton",
+      "contributionsCollection": {
+        "contributionCalendar": {
+          "weeks": [
+            {
+              "contributionDays": [
+                {
+                  "contributionCount": 9,
+                  "weekday": 0
+                },
+                {
+                  "contributionCount": 3,
+                  "weekday": 1
+                },
+                {
+                  "contributionCount": 0,
+                  "weekday": 2
+                },
+                {
+                  "contributionCount": 1,
+                  "weekday": 3
+                },
+                {
+                  "contributionCount": 0,
+                  "weekday": 4
+                },
+                {
+                  "contributionCount": 1,
+                  "weekday": 5
+                },
+                {
+                  "contributionCount": 0,
+                  "weekday": 6
+                }
+              ]
+            },
+            {
+              "contributionDays": [
+                {
+                  "contributionCount": 0,
+                  "weekday": 0
+                },
+                {
+                  "contributionCount": 0,
+                  "weekday": 1
+                },
+                {
+                  "contributionCount": 3,
+                  "weekday": 2
+                },
+                {
+                  "contributionCount": 0,
+                  "weekday": 3
+                },
+                {
+                  "contributionCount": 0,
+                  "weekday": 4
+                },
+                {
+                  "contributionCount": 1,
+                  "weekday": 5
+                },
+                {
+                  "contributionCount": 2,
+                  "weekday": 6
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
