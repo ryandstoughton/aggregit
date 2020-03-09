@@ -37,11 +37,11 @@ class GithubServiceTest {
   }
 
   @Test
-  void userContributions_callsGithubClient() throws IOException {
+  void userContributions_callsGithubClient_mapsResultsToGeneric() throws IOException {
     String username = "someuser";
 
     gitContributionsJson = IOUtils.inputStreamAsString(
-        new ClassPathResource("githubContributionsFullToGitContributions.json").getInputStream(),
+        new ClassPathResource("gitContributionsForGithubConversion.json").getInputStream(),
         "UTF-8");
 
     List<GitContributionDay> expectedGitContributionDays = mapper
@@ -49,7 +49,7 @@ class GithubServiceTest {
         });
 
     githubContributionsJson = IOUtils.inputStreamAsString(
-        new ClassPathResource("githubContributionsFull.json").getInputStream(),
+        new ClassPathResource("githubContributionsForGitConversion.json").getInputStream(),
         "UTF-8");
     GithubContributions githubContributions = mapper
         .readValue(githubContributionsJson, GithubContributions.class);
@@ -57,7 +57,7 @@ class GithubServiceTest {
         .thenReturn(Mono.just(githubContributions));
 
     StepVerifier.create(subject.userContributions(username))
-        .as("Call to subject that should produce some expected GithubContributions")
+        .as("Call to subject that should produce some expected GitContributionsDays")
         .assertNext(gitContributions ->
             Assertions.assertEquals(gitContributions, expectedGitContributionDays))
         .expectComplete()

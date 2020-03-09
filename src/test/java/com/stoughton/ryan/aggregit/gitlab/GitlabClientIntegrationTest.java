@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -45,12 +46,11 @@ class GitlabClientIntegrationTest {
 
   @Test
   void userContributions_deserializesResponse()
-      throws JsonProcessingException, InterruptedException, ParseException {
+      throws JsonProcessingException, InterruptedException {
     startServer();
-    SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
     List<GitlabContribution> expectedBody = Lists.newArrayList(
         GitlabContribution.builder()
-            .createdAt(dateTimeFormat.parse("2019-11-23T03:15:17.999Z"))
+            .createdAt("2019-11-23")
             .build()
     );
     String expectedBodyJson = mapper.writeValueAsString(expectedBody);
