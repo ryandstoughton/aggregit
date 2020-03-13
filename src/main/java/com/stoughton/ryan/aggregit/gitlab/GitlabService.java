@@ -14,8 +14,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 public class GitlabService {
-
   private final int DAYS_IN_A_YEAR = 365;
+  private final int GIT_CONTRIBUTION_DAYS_IN_A_YEAR = 366;
 
   private GitlabClient gitlabClient;
   private DateUtil dateUtil;
@@ -28,7 +28,7 @@ public class GitlabService {
   public Mono<List<GitContributionDay>> userContributions(String username) {
     final LocalDate now = dateUtil.getCurrentDate();
     final List<Integer> contributionCount = Lists.newArrayList(
-        Collections.nCopies(DAYS_IN_A_YEAR + 1, 0));
+        Collections.nCopies(GIT_CONTRIBUTION_DAYS_IN_A_YEAR, 0));
 
     return gitlabClient.userContributions(username)
         .map(gitlabContributions -> {

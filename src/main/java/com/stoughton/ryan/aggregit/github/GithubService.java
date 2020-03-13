@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Service
 public class GithubService {
+
   private final int GIT_CONTRIBUTION_DAYS_IN_A_YEAR = 366;
 
   private GithubClient githubClient;
@@ -40,16 +41,17 @@ public class GithubService {
                     .count(day.getContributionCount())
                     .dayOfYear(dayOfYear.getAndIncrement())
                     .build());
-            log.info(">> days: {}", gitContributionDayStream);
             return gitContributionDayStream;
           })
           .collect(Collectors.toList()));
 
-      if (dayOfYear.get() > GIT_CONTRIBUTION_DAYS_IN_A_YEAR) { // Too many days mapped
+      // Too many days mapped, trim to 366 latest
+      if (dayOfYear.get() > GIT_CONTRIBUTION_DAYS_IN_A_YEAR) {
         days = days.flatMap(gitContributionDays -> {
           AtomicInteger numDays = new AtomicInteger(gitContributionDays.size());
           AtomicInteger newDayOfYear = new AtomicInteger(0);
-          gitContributionDays.removeIf(ignored -> numDays.getAndDecrement() > GIT_CONTRIBUTION_DAYS_IN_A_YEAR);
+          gitContributionDays
+              .removeIf(ignored -> numDays.getAndDecrement() > GIT_CONTRIBUTION_DAYS_IN_A_YEAR);
           gitContributionDays.forEach(day -> day.setDayOfYear(newDayOfYear.getAndIncrement()));
           return Mono.just(gitContributionDays);
         });
