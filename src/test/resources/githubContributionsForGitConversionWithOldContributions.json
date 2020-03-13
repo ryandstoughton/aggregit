@@ -8,6 +8,38 @@
             {
               "contributionDays": [
                 {
+                  "contributionCount": 999,
+                  "weekday": 0
+                },
+                {
+                  "contributionCount": 999,
+                  "weekday": 1
+                },
+                {
+                  "contributionCount": 999,
+                  "weekday": 2
+                },
+                {
+                  "contributionCount": 999,
+                  "weekday": 3
+                },
+                {
+                  "contributionCount": 999,
+                  "weekday": 4
+                },
+                {
+                  "contributionCount": 999,
+                  "weekday": 5
+                },
+                {
+                  "contributionCount": 999,
+                  "weekday": 6
+                }
+              ]
+            },
+            {
+              "contributionDays": [
+                {
                   "contributionCount": 0,
                   "weekday": 0
                 },
