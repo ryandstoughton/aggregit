@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import com.stoughton.ryan.aggregit.controllers.GitController.UnsupportedPlatformException;
 import com.stoughton.ryan.aggregit.git.GitContributionDay;
 import com.stoughton.ryan.aggregit.github.GithubService;
+import com.stoughton.ryan.aggregit.gitlab.GitlabService;
 import java.util.List;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Assertions;
@@ -23,11 +24,14 @@ class GitControllerTest {
   @Mock
   private GithubService githubService;
 
+  @Mock
+  private GitlabService gitlabService;
+
   private GitController subject;
 
   @BeforeEach
   void setUp() {
-    subject = new GitController(githubService);
+    subject = new GitController(githubService, gitlabService);
   }
 
   @Test
@@ -42,13 +46,32 @@ class GitControllerTest {
         .thenReturn(Mono.just(expectedGitContributions));
 
     StepVerifier.create(subject.userContributions(platform, username))
-        .as("Call to subject that should produce some expected GithubContributions")
-        .assertNext(githubContributions ->
-            Assertions.assertEquals(githubContributions, expectedGitContributions))
+        .assertNext(contributions ->
+            Assertions.assertEquals(contributions, expectedGitContributions))
         .expectComplete()
         .verify();
 
     verify(githubService).userContributions(username);
+  }
+
+  @Test
+  void userContributions_targetsGitlab_callsGitlabService() {
+    String platform = "gitlab";
+    String username = "someuser";
+    List<GitContributionDay> expectedGitContributions = Lists.newArrayList(
+        GitContributionDay.builder().count(1).dayOfYear(0).build(),
+        GitContributionDay.builder().count(3).dayOfYear(1).build()
+    );
+    when(gitlabService.userContributions(username))
+        .thenReturn(Mono.just(expectedGitContributions));
+
+    StepVerifier.create(subject.userContributions(platform, username))
+        .assertNext(contributions ->
+            Assertions.assertEquals(contributions, expectedGitContributions))
+        .expectComplete()
+        .verify();
+
+    verify(gitlabService).userContributions(username);
   }
 
   @Test

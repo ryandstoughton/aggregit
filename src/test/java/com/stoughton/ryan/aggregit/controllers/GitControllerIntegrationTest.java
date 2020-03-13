@@ -4,6 +4,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.stoughton.ryan.aggregit.github.GithubService;
+import com.stoughton.ryan.aggregit.gitlab.GitlabService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,9 +24,12 @@ class GitControllerIntegrationTest {
   @MockBean
   GithubService githubService;
 
+  @MockBean
+  GitlabService gitlabService;
+
   @BeforeEach()
   void setUp() {
-    webTestClient = WebTestClient.bindToController(new GitController(githubService)).build();
+    webTestClient = WebTestClient.bindToController(new GitController(githubService, gitlabService)).build();
   }
 
   @Test
@@ -36,6 +40,16 @@ class GitControllerIntegrationTest {
         .expectStatus().isOk();
 
     verify(githubService).userContributions("someuser");
+  }
+
+  @Test
+  void userContributions_targetsGitlab() {
+    webTestClient.get().uri("/git/contributions?username=someuser&platform=gitlab")
+        .accept(MediaType.APPLICATION_JSON)
+        .exchange()
+        .expectStatus().isOk();
+
+    verify(gitlabService).userContributions("someuser");
   }
 
   @Test

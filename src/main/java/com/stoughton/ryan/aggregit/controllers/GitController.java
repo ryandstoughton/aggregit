@@ -2,6 +2,7 @@ package com.stoughton.ryan.aggregit.controllers;
 
 import com.stoughton.ryan.aggregit.git.GitContributionDay;
 import com.stoughton.ryan.aggregit.github.GithubService;
+import com.stoughton.ryan.aggregit.gitlab.GitlabService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,9 +20,11 @@ import reactor.core.publisher.Mono;
 public class GitController {
 
   private GithubService githubService;
+  private GitlabService gitlabService;
 
-  public GitController(GithubService githubService) {
+  public GitController(GithubService githubService, GitlabService gitlabService) {
     this.githubService = githubService;
+    this.gitlabService = gitlabService;
   }
 
   @GetMapping(path = "/contributions", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,6 +34,8 @@ public class GitController {
     switch (platform) {
       case "github":
         return githubService.userContributions(username);
+      case "gitlab":
+        return gitlabService.userContributions(username);
       default:
         return Mono.error(new UnsupportedPlatformException());
     }
