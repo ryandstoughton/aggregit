@@ -51,6 +51,9 @@ class GitlabClientIntegrationTest {
     List<GitlabContribution> expectedBody = Lists.newArrayList(
         GitlabContribution.builder()
             .createdAt("2019-11-23")
+            .build(),
+        GitlabContribution.builder()
+            .createdAt("2019-11-21")
             .build()
     );
     String expectedBodyJson = mapper.writeValueAsString(expectedBody);

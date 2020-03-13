@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 public class DateUtil {
 
   public LocalDate getCurrentDate() {
-    return LocalDate.from(Instant.now());
+    String nowString = Instant.now().toString().substring(0, 10);
+    return LocalDate.parse(nowString);
   }
 
 }
