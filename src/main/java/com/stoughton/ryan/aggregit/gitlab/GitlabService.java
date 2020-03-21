@@ -25,6 +25,10 @@ public class GitlabService {
     this.dateUtil = dateUtil;
   }
 
+  public Mono<Boolean> userExists(String username) {
+    return gitlabClient.userExists(username);
+  }
+
   public Mono<List<GitContributionDay>> userContributions(String username) {
     final LocalDate now = dateUtil.getCurrentDate();
     final List<Integer> contributionCount = Lists.newArrayList(

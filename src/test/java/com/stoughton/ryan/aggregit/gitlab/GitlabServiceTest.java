@@ -12,7 +12,6 @@ import com.stoughton.ryan.aggregit.git.GitContributionDay;
 import com.stoughton.ryan.aggregit.util.DateUtil;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +41,17 @@ class GitlabServiceTest {
   @BeforeEach
   void setUp() {
     subject = new GitlabService(gitlabClient, dateUtil);
+  }
+
+  @Test
+  void userExists() {
+    String username = "someuser";
+
+    when(gitlabClient.userExists(anyString())).thenReturn(Mono.just(true));
+
+    StepVerifier.create(subject.userExists(username))
+        .expectNext(true)
+        .verifyComplete();
   }
 
   @Test
