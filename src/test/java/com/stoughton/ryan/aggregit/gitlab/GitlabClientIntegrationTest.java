@@ -73,6 +73,80 @@ class GitlabClientIntegrationTest {
         .isEqualTo(Lists.newArrayList("users", "someuser", "events"));
   }
 
+  @Test
+  void userExists_oneUserFound_returnsTrue()
+      throws InterruptedException, JsonProcessingException {
+    startServer();
+
+    List<GitlabUser> usersResponse = Lists.newArrayList(GitlabUser.builder().build());
+    String usersResponseJson = mapper.writeValueAsString(usersResponse);
+
+    prepareResponse(response -> response
+        .setHeader("content-type", "application/json")
+        .setBody(usersResponseJson));
+
+    StepVerifier.create(subject.userExists("someuser"))
+        .expectNext(true)
+        .verifyComplete();
+
+    // Set timeout avoids unsatisfied test condition from hanging indefinitely
+    RecordedRequest recordedRequest = this.server.takeRequest(3, TimeUnit.SECONDS);
+    assertThat(recordedRequest.getRequestUrl().pathSegments())
+        .isEqualTo(Lists.newArrayList("users"));
+    assertThat(recordedRequest.getRequestUrl().queryParameter("username"))
+        .isEqualTo("someuser");
+  }
+
+  @Test
+  void userExists_emptyList_returnsFalse()
+      throws InterruptedException, JsonProcessingException {
+    startServer();
+
+    List<GitlabUser> usersResponse = Lists.newArrayList();
+    String usersResponseJson = mapper.writeValueAsString(usersResponse);
+
+    prepareResponse(response -> response
+        .setHeader("content-type", "application/json")
+        .setBody(usersResponseJson));
+
+    StepVerifier.create(subject.userExists("someuser"))
+        .expectNext(false)
+        .verifyComplete();
+
+    // Set timeout avoids unsatisfied test condition from hanging indefinitely
+    RecordedRequest recordedRequest = this.server.takeRequest(3, TimeUnit.SECONDS);
+    assertThat(recordedRequest.getRequestUrl().pathSegments())
+        .isEqualTo(Lists.newArrayList("users"));
+    assertThat(recordedRequest.getRequestUrl().queryParameter("username"))
+        .isEqualTo("someuser");
+  }
+
+  @Test
+  void userExists_tooManyResults_returnsFalse()
+      throws InterruptedException, JsonProcessingException {
+    startServer();
+
+    List<GitlabUser> usersResponse = Lists.newArrayList(
+        GitlabUser.builder().username("someuser").build(),
+        GitlabUser.builder().username("someuser2").build());
+    String usersResponseJson = mapper.writeValueAsString(usersResponse);
+
+    prepareResponse(response -> response
+        .setHeader("content-type", "application/json")
+        .setBody(usersResponseJson));
+
+    StepVerifier.create(subject.userExists("someuser"))
+        .expectNext(false)
+        .verifyComplete();
+
+    // Set timeout avoids unsatisfied test condition from hanging indefinitely
+    RecordedRequest recordedRequest = this.server.takeRequest(3, TimeUnit.SECONDS);
+    assertThat(recordedRequest.getRequestUrl().pathSegments())
+        .isEqualTo(Lists.newArrayList("users"));
+    assertThat(recordedRequest.getRequestUrl().queryParameter("username"))
+        .isEqualTo("someuser");
+  }
+
   private void startServer() {
     this.server = new MockWebServer();
     this.webClient = WebClient.builder()

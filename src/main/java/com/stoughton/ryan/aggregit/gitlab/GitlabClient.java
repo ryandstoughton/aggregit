@@ -17,6 +17,16 @@ public class GitlabClient {
     this.webClient = webClient;
   }
 
+  public Mono<Boolean> userExists(String username) {
+      return webClient.get()
+          .uri("/users?username=" + username)
+          .accept(MediaType.APPLICATION_JSON)
+          .exchange()
+          .flatMapMany(response -> response.bodyToFlux(GitlabUser.class))
+          .collectList()
+          .map(users -> users.size() == 1);
+  }
+
   public Mono<List<GitlabContribution>> userContributions(String username) {
     Flux<GitlabContribution> gcFlux = webClient.get()
         .uri("/users/" + username + "/events")
