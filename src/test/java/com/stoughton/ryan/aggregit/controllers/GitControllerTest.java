@@ -37,13 +37,16 @@ class GitControllerTest {
   }
 
   @Test
-  void userContributions_targetsGithub_callsGithubService() {
+  void userContributions_targetsGithub_userExists_getsContributions() {
     String platform = "github";
     String username = "someuser";
     List<GitContributionDay> expectedGitContributions = Lists.newArrayList(
         GitContributionDay.builder().count(1).dayOfYear(0).build(),
         GitContributionDay.builder().count(3).dayOfYear(1).build()
     );
+
+    when(githubService.userExists(username))
+        .thenReturn(Mono.just(true));
     when(githubService.userContributions(username))
         .thenReturn(Mono.just(expectedGitContributions));
 
@@ -53,7 +56,24 @@ class GitControllerTest {
         .expectComplete()
         .verify();
 
+    verify(githubService).userExists(username);
     verify(githubService).userContributions(username);
+  }
+
+  @Test
+  void userContributions_targetsGithub_userDoesNotExist_doesNotGetContributions() {
+    String platform = "github";
+    String username = "someuser";
+
+    when(githubService.userExists(username))
+        .thenReturn(Mono.just(false));
+
+    StepVerifier.create(subject.userContributions(platform, username))
+        .expectError(NoSuchUserException.class)
+        .verify();
+
+    verify(githubService).userExists(username);
+    verifyNoMoreInteractions(githubService);
   }
 
   @Test
@@ -83,10 +103,7 @@ class GitControllerTest {
   void userContributions_targetsGitlab_userDoesNotExist_throwsError() {
     String platform = "gitlab";
     String username = "someuser";
-    List<GitContributionDay> expectedGitContributions = Lists.newArrayList(
-        GitContributionDay.builder().count(1).dayOfYear(0).build(),
-        GitContributionDay.builder().count(3).dayOfYear(1).build()
-    );
+
     when(gitlabService.userExists(username))
         .thenReturn(Mono.just(false));
 

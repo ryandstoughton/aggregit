@@ -34,7 +34,9 @@ public class GitController {
       @RequestParam("username") String username) {
     switch (platform) {
       case "github":
-        return githubService.userContributions(username);
+        return githubService.userExists(username)
+            .flatMap(exists -> exists ?
+                githubService.userContributions(username) : Mono.error(new NoSuchUserException()));
       case "gitlab":
         return gitlabService.userExists(username)
             .flatMap(exists -> exists ?

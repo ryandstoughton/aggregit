@@ -39,11 +39,18 @@ class GitControllerIntegrationTest {
 
   @Test
   void userContributions_targetsGithub() {
+    when(githubService.userExists(anyString())).thenReturn(Mono.just(true));
+    when(githubService.userContributions(anyString()))
+        .thenReturn(Mono.just(Lists.newArrayList(
+            GitContributionDay.builder().build()
+        )));
+
     webTestClient.get().uri("/git/contributions?username=someuser&platform=github")
         .accept(MediaType.APPLICATION_JSON)
         .exchange()
         .expectStatus().isOk();
 
+    verify(githubService).userExists("someuser");
     verify(githubService).userContributions("someuser");
   }
 
