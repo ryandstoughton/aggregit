@@ -1,6 +1,7 @@
 package com.stoughton.ryan.aggregit.github;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,6 +37,15 @@ class GithubServiceTest {
   @BeforeEach
   void setUp() {
     subject = new GithubService(githubClient);
+  }
+
+  @Test
+  void userExists() {
+    when(githubClient.userExists(anyString())).thenReturn(Mono.just(true));
+
+    StepVerifier.create(subject.userExists("someuser"))
+        .expectNext(true)
+        .verifyComplete();
   }
 
   @Test

@@ -22,6 +22,10 @@ public class GithubService {
     this.githubClient = githubClient;
   }
 
+  public Mono<Boolean> userExists(String username) {
+    return githubClient.userExists(username);
+  }
+
   public Mono<List<GitContributionDay>> userContributions(String username) {
     return githubClient.userContributions(username).flatMap(githubContributions -> {
       AtomicInteger dayOfYear = new AtomicInteger(0);
