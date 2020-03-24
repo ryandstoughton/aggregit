@@ -16,12 +16,25 @@ public class GithubClient {
     this.webClient = webClient;
   }
 
+  public Mono<Boolean> userExists(String username) {
+    return webClient.post()
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(BodyInserters.fromValue(buildUserExistsQuery(username)))
+        .retrieve()
+        .bodyToMono(GithubUser.class)
+        .map(githubUser -> githubUser.getData().getUser() != null);
+  }
+
   public Mono<GithubContributions> userContributions(String username) {
     return webClient.post()
         .contentType(MediaType.APPLICATION_JSON)
         .body(BodyInserters.fromValue(buildUserContributionsQuery(username)))
         .retrieve()
         .bodyToMono(GithubContributions.class);
+  }
+
+  private String buildUserExistsQuery(String username) {
+    return "{\"query\": \"query { user(login \\\"" + username + "\\\") { login } }\"}";
   }
 
   private String buildUserContributionsQuery(String username) {
