@@ -66,7 +66,7 @@ class GithubClientIntegrationTest {
     RecordedRequest recordedRequest = this.server.takeRequest();
     String requestBody = IOUtils
         .inputStreamAsString(recordedRequest.getBody().inputStream(), "UTF-8");
-    assertThat(requestBody).isEqualTo("{\"query\": \"query { user(login \\\"someuser\\\") { login } }\"}");
+    assertThat(requestBody).isEqualTo("{\"query\": \"query { user(login: \\\"someuser\\\") { login } }\"}");
   }
 
   @Test
@@ -88,7 +88,7 @@ class GithubClientIntegrationTest {
     RecordedRequest recordedRequest = this.server.takeRequest();
     String requestBody = IOUtils
         .inputStreamAsString(recordedRequest.getBody().inputStream(), "UTF-8");
-    assertThat(requestBody).isEqualTo("{\"query\": \"query { user(login \\\"someuser\\\") { login } }\"}");
+    assertThat(requestBody).isEqualTo("{\"query\": \"query { user(login: \\\"someuser\\\") { login } }\"}");
   }
 
   @Test

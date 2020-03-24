@@ -34,7 +34,7 @@ public class GithubClient {
   }
 
   private String buildUserExistsQuery(String username) {
-    return "{\"query\": \"query { user(login \\\"" + username + "\\\") { login } }\"}";
+    return "{\"query\": \"query { user(login: \\\"" + username + "\\\") { login } }\"}";
   }
 
   private String buildUserContributionsQuery(String username) {
