@@ -53,6 +53,13 @@ public class GitController {
   public void unsupportedPlatformExceptionHandler() {
   }
 
+  @ResponseStatus(
+      value = HttpStatus.NOT_FOUND,
+      reason = "No user found")
+  @ExceptionHandler(NoSuchUserException.class)
+  public void noSuchUserExceptionHandler() {
+  }
+
   protected static class UnsupportedPlatformException extends Exception {
 
   }

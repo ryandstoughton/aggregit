@@ -3,6 +3,7 @@ package com.stoughton.ryan.aggregit.controllers;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.stoughton.ryan.aggregit.git.GitContributionDay;
@@ -69,6 +70,19 @@ class GitControllerIntegrationTest {
 
     verify(gitlabService).userExists("someuser");
     verify(gitlabService).userContributions("someuser");
+  }
+
+  @Test
+  void userContributions_doesNotFindUser() {
+    when(githubService.userExists(anyString())).thenReturn(Mono.just(false));
+
+    webTestClient.get().uri("/git/contributions?username=someuser&platform=github")
+        .accept(MediaType.APPLICATION_JSON)
+        .exchange()
+        .expectStatus().isEqualTo(HttpStatus.NOT_FOUND);
+
+    verify(githubService).userExists("someuser");
+    verifyNoMoreInteractions(githubService);
   }
 
   @Test
