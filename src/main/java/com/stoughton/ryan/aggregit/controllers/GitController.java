@@ -1,6 +1,7 @@
 package com.stoughton.ryan.aggregit.controllers;
 
 import com.stoughton.ryan.aggregit.git.GitContributionDay;
+import com.stoughton.ryan.aggregit.git.NoSuchUserException;
 import com.stoughton.ryan.aggregit.github.GithubService;
 import com.stoughton.ryan.aggregit.gitlab.GitlabService;
 import java.util.List;
@@ -35,7 +36,9 @@ public class GitController {
       case "github":
         return githubService.userContributions(username);
       case "gitlab":
-        return gitlabService.userContributions(username);
+        return gitlabService.userExists(username)
+            .flatMap(exists -> exists ?
+                gitlabService.userContributions(username) : Mono.error(new NoSuchUserException()));
       default:
         return Mono.error(new UnsupportedPlatformException());
     }

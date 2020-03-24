@@ -1,10 +1,12 @@
 package com.stoughton.ryan.aggregit.controllers;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.stoughton.ryan.aggregit.controllers.GitController.UnsupportedPlatformException;
 import com.stoughton.ryan.aggregit.git.GitContributionDay;
+import com.stoughton.ryan.aggregit.git.NoSuchUserException;
 import com.stoughton.ryan.aggregit.github.GithubService;
 import com.stoughton.ryan.aggregit.gitlab.GitlabService;
 import java.util.List;
@@ -55,13 +57,15 @@ class GitControllerTest {
   }
 
   @Test
-  void userContributions_targetsGitlab_callsGitlabService() {
+  void userContributions_targetsGitlab_userExists_getContributions() {
     String platform = "gitlab";
     String username = "someuser";
     List<GitContributionDay> expectedGitContributions = Lists.newArrayList(
         GitContributionDay.builder().count(1).dayOfYear(0).build(),
         GitContributionDay.builder().count(3).dayOfYear(1).build()
     );
+    when(gitlabService.userExists(username))
+        .thenReturn(Mono.just(true));
     when(gitlabService.userContributions(username))
         .thenReturn(Mono.just(expectedGitContributions));
 
@@ -71,7 +75,27 @@ class GitControllerTest {
         .expectComplete()
         .verify();
 
+    verify(gitlabService).userExists(username);
     verify(gitlabService).userContributions(username);
+  }
+
+  @Test
+  void userContributions_targetsGitlab_userDoesNotExist_throwsError() {
+    String platform = "gitlab";
+    String username = "someuser";
+    List<GitContributionDay> expectedGitContributions = Lists.newArrayList(
+        GitContributionDay.builder().count(1).dayOfYear(0).build(),
+        GitContributionDay.builder().count(3).dayOfYear(1).build()
+    );
+    when(gitlabService.userExists(username))
+        .thenReturn(Mono.just(false));
+
+    StepVerifier.create(subject.userContributions(platform, username))
+        .expectError(NoSuchUserException.class)
+        .verify();
+
+    verify(gitlabService).userExists(username);
+    verifyNoMoreInteractions(gitlabService);
   }
 
   @Test
